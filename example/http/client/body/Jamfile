@@ -12,3 +12,9 @@ exe json_client : json_client.cpp
     <variant>coverage:<build>no
     <variant>ubasan:<build>no
     ;
+
+exe zlib_client : zlib_client.cpp
+    :
+    <variant>coverage:<build>no
+    <variant>ubasan:<build>no
+;

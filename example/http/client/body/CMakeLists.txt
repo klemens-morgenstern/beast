@@ -21,3 +21,16 @@ target_link_libraries(http-client-json
     lib-beast)
 
 set_property(TARGET http-client-json PROPERTY FOLDER "example-json-client")
+
+
+add_executable (http-client-zlib
+        ${BOOST_BEAST_FILES}
+        Jamfile
+        zlib_client.cpp
+        )
+
+target_link_libraries(http-client-zlib
+        lib-asio
+        lib-beast)
+
+set_property(TARGET http-client-zlib PROPERTY FOLDER "example-zlib-client")
