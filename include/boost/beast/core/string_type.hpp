@@ -15,7 +15,9 @@
 #include <boost/core/detail/string_view.hpp>
 #if defined(BOOST_BEAST_USE_STD_STRING_VIEW)
 #include <boost/config/pragma_message.hpp>
-BOOST_PRAGMA_MESSAGE("BOOST_BEAST_USE_STD_STRING_VIEW is deprecated, use BOOST_NO_CXX17_HDR_STRING_VIEW instead");
+/* BOOST_BEAST_USE_STD_STRING_VIEW is deprecated because it
+ * did change the ABI based on a preprocessor symbol. */
+BOOST_PRAGMA_MESSAGE("BOOST_BEAST_USE_STD_STRING_VIEW is deprecated.");
 #endif
 
 namespace boost {
