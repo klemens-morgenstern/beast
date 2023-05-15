@@ -180,10 +180,10 @@ private:
                 "Dereferencing a default-constructed iterator");
         }
 
-        template<class I>
-        reference operator()(I)
+        template<std::size_t I>
+        reference operator()(mp11::mp_size_t<I>)
         {
-            return *self.it_.template get<I::value>();
+            return *self.it_.template get<I>();
         }
     };
 
