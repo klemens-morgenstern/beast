@@ -330,11 +330,13 @@ public:
             h_, wg1_.get_executor());
     }
 
-    /** Returns the executor associated with this object.
+    /** Returns the immediate executor associated with this handler.
+        If the handler has none it returns asios default immediate
+        executor based on the executor of the object.
 
         If a class derived from @ref boost::beast::async_base is a completion
         handler, then the object returned from this function will be used
-        as the associated executor of the derived class.
+        as the associated immediate executor of the derived class.
     */
     immediate_executor_type
     get_immediate_executor() const noexcept
