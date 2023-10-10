@@ -18,6 +18,7 @@
 #include <boost/beast/http/dynamic_body.hpp>
 #include <boost/beast/http/parser.hpp>
 #include <boost/beast/http/string_body.hpp>
+#include <boost/beast/_experimental/test/immediate_executor.hpp>
 #include <boost/beast/_experimental/test/stream.hpp>
 #include <boost/beast/_experimental/unit_test/suite.hpp>
 #include <boost/beast/test/yield_to.hpp>
@@ -26,6 +27,7 @@
 #include <boost/asio/strand.hpp>
 #include <boost/asio/write.hpp>
 #include <boost/asio/bind_cancellation_slot.hpp>
+#include <boost/asio/bind_immediate_executor.hpp>
 #include <boost/asio/error.hpp>
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/connect_pipe.hpp>
@@ -541,6 +543,27 @@ public:
         }
     }
 
+    void
+    testImmediateHTTP()
+    {
+        test::stream ts{ioc_};
+        multi_buffer b;
+        std::size_t count = 0;
+        std::size_t ic = 0u;
+        test::immediate_executor imex{ic};
+        request_parser<dynamic_body> p;
+
+        async_read_some(ts, b, p, asio::bind_immediate_executor(imex,
+            [&](error_code ec, std::size_t) {
+                if(ec != net::error::operation_aborted) {
+                    BOOST_THROW_EXCEPTION(system_error{ec});
+                }
+                ++count;
+        }));
+
+        BEAST_EXPECT(count == 1);
+    }
+
 #if BOOST_ASIO_HAS_CO_AWAIT
     void testAwaitableCompiles(
         test::stream& stream,
@@ -740,7 +763,7 @@ public:
     testCancellation(yield_context do_yield)
     {
         // this is tested on a pipe
-        // because the test::stream doesn't implement cancellation 
+        // because the test::stream doesn't implement cancellation
         {
             response<string_body> m;
             error_code ec;
@@ -810,6 +833,7 @@ public:
         testRegression430();
         testReadGrind();
         testAsioHandlerInvoke();
+        testImmediateHTTP();
 #if BOOST_ASIO_HAS_CO_AWAIT
         boost::ignore_unused(&read_test::testAwaitableCompiles);
 #endif
