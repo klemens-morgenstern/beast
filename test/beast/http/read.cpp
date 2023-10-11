@@ -547,7 +547,7 @@ public:
     testImmediateHTTP()
     {
         test::stream ts{ioc_};
-        flat_static_buffer<0> b;
+        multi_buffer b;
         std::size_t count = 0;
         std::size_t ic = 0u;
         test::immediate_executor imex{ic};
