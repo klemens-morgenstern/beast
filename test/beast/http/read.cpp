@@ -547,7 +547,7 @@ public:
     testImmediateHTTP()
     {
         test::stream ts{ioc_};
-        multi_buffer b;
+        flat_static_buffer<0> b;
         std::size_t count = 0;
         std::size_t ic = 0u;
         test::immediate_executor imex{ic};
@@ -555,7 +555,7 @@ public:
 
         async_read_some(ts, b, p, asio::bind_immediate_executor(imex,
             [&](error_code ec, std::size_t) {
-                if(ec != net::error::operation_aborted) {
+                if(ec != error::buffer_overflow) {
                     BOOST_THROW_EXCEPTION(system_error{ec});
                 }
                 ++count;
