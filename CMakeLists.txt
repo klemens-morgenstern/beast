@@ -299,4 +299,10 @@ if (Beast_BUILD_TESTS)
     add_subdirectory (test)
 endif()
 
+
+endif()
+
+
+if (BUILD_MODULE)
+    add_subdirectory(module)
 endif()
